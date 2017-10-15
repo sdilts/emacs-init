@@ -2,7 +2,7 @@
 (require 'cl-lib)
 
 (defgroup easy-load-shell nil
-  "Provides convenince function to open a shell in a mostly
+  "Provides convenience function to open a shell in a mostly
 convenient place")
 
 (defcustom *easy-shell-type* 'eshell
@@ -15,12 +15,12 @@ Must correspond with *easy-shell-default-buffer*, or else switching will not wor
 Must correspond to *easy-shell-type*, or else switching will not work properly"
   :group 'easy-load-shell)
 
-(defmacro open-shell (&optional location)
+(defun open-shell (&optional location)
   "Provides a generic function to open the shell"
   (if location
-       `(let ((default-directory ,location))
-	 (funcall *easy-shell-type* ,location))
-     `(funcall *easy-shell-type*)))
+      (let ((default-directory location))
+	 (funcall *easy-shell-type* location))
+    (funcall *easy-shell-type*)))
 
 
 (defun window-b-right-corner-p (window)
@@ -54,12 +54,12 @@ corner of the frame."
 	  (split-window)
 	  (other-window 1)
 	  ;; make the new buffer smaller
-	  (let ((delta-size (/ (window-height) -2)))
-	    (if (window-resizable nil delta-size)
-		(window-resize nil delta-size)))
+	  ;; (let ((delta-size (/ (window-height) -2)))
+	  ;;   (if (window-resizable nil delta-size)
+	  ;; 	(window-resize nil delta-size)))
 	  (open-shell location))
 	 (t
-	  (select-windown
+	  (select-window
 	   (cl-find-if #'window-b-right-corner-p (window-list)))
 	  (open-shell location))))))
 
