@@ -1,19 +1,21 @@
-(require 'cl)
 (require 'cl-lib)
 
 (defgroup easy-load-shell nil
   "Provides convenience function to open a shell in a mostly
-convenient place")
+convenient place"
+  :group 'convenience)
 
 (defcustom *easy-shell-type* 'eshell
   "The shell or repl that will load when load-shell is called.
 Must correspond with *easy-shell-default-buffer*, or else switching will not work properly"
-  :group 'easy-load-shell)
+  :group 'easy-load-shell
+  :type 'symbol)
 
 (defcustom *easy-shell-default-buffer* "*eshell*"
   "The name of the buffer that the shell specified by *easy-shell-type* lives in.
 Must correspond to *easy-shell-type*, or else switching will not work properly"
-  :group 'easy-load-shell)
+  :group 'easy-load-shell
+  :type 'string)
 
 (defun open-shell (&optional location)
   "Provides a generic function to open the shell"
@@ -53,10 +55,10 @@ corner of the frame."
 	   (window-buffer (cl-find #'window-b-right-corner-p (window-list))))
 	  (split-window)
 	  (other-window 1)
-	  ;; make the new buffer smaller
-	  ;; (let ((delta-size (/ (window-height) -2)))
-	  ;;   (if (window-resizable nil delta-size)
-	  ;; 	(window-resize nil delta-size)))
+	  ;; make the new window smaller
+	  (let ((delta-size (/ (window-height) -2)))
+	    (if (window-resizable nil delta-size)
+	  	(window-resize nil delta-size)))
 	  (open-shell location))
 	 (t
 	  (select-window
