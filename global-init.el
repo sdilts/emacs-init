@@ -44,6 +44,13 @@
   :commands org-mode)
 (use-package magit
   :ensure t)
+(use-package ivy
+  :ensure t)
+(use-package swiper
+  :ensure t
+  :config
+  (setf ivy-wrap t)
+  :bind (("C-s" . swiper)))
 
 (ido-mode t)
 
@@ -81,9 +88,13 @@
       (popwin-mode 1))))
 (my-global-popwin-mode 1)
 
-(use-package multi-web-mode
+(use-package vimish-fold
   :ensure t
-  :defer t
+  :bind ("s-i" . vimish-fold)
+  :bind ("s-a" . vimish-fold-toggle)
+  :bind ("s-c" . vimish-unfold))
+
+(use-package multi-web-mode
   :config
   (setq mweb-default-major-mode 'html-mode)
   (setq mweb-tags

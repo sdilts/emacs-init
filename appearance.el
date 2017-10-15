@@ -12,6 +12,7 @@
   (require 'spaceline-config)
   (spaceline-compile)
   (spaceline-emacs-theme)
+  (spaceline-toggle-version-control-on)
   (setf powerline-default-separator 'arrow))
 
 (use-package material-theme
