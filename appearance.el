@@ -16,11 +16,11 @@
   (setf powerline-default-separator 'arrow))
 
 (use-package material-theme
+  :ensure t
   :config
   (load-theme 'material t))
 
 (use-package fancy-battery
-  :ensure t
   :config
   (fancy-battery-mode))
 
