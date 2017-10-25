@@ -90,9 +90,9 @@
 
 (use-package vimish-fold
   :ensure t
-  :bind ("s-i" . vimish-fold)
-  :bind ("s-a" . vimish-fold-toggle)
-  :bind ("s-c" . vimish-unfold))
+  :bind ("s-c" . vimish-fold)
+  :bind ("s-a" . vimish-fold-toggle))
+;;:bind ("s-d" . vimish-unfold))
 
 (use-package multi-web-mode
   :config
@@ -174,9 +174,9 @@
 
 
 
-(let ((maxima-location "/usr/share/maxima/5.40.0/emacs/"))
+(let ((maxima-location "/usr/local/share/maxima/5.40.0/emacs/"))
   (when (file-directory-p maxima-location)
-    (add-to-list 'load-path "/usr/share/maxima/5.40.0/emacs/")
+    (add-to-list 'load-path maxima-location)
     (autoload 'maxima-mode "maxima" "Maxima mode" t)
     (autoload 'imaxima "imaxima" "Frontend for maxima with Image support" t)
     (autoload 'maxima "maxima" "Maxima interaction" t)
