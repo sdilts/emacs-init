@@ -5,14 +5,19 @@
 (setq python-environment--verbose t)
 (setq jedi:environment-root "/home/stuart/Programs/emacs-jedi/env")
 (add-to-list 'load-path "/home/stuart/Programs/emacs-jedi")
-;;(load-file "/home/stuart/Programs/emacs-jedi/tryout-jedi.el")
 
 ;; stuff for jedi-mode completion:
 ;; Jedi
 (autoload 'jedi:setup "jedi" nil t)
 (setq jedi:complete-on-dot t)
 
-(require 'python-environment)
+;; if installing manually through my fork, these packages are required:
+(use-package python-environment
+  :ensure t)
+
+(use-package auto-complete
+  :ensure t)
+
 (setq jedi:environment-virtualenv
     	  (append python-environment-virtualenv
     		  '("--python" "python3")))
