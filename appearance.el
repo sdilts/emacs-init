@@ -9,6 +9,7 @@
       (menu-bar-mode -1)
       (load-theme 'manoj-dark))
   (progn
+    (menu-bar-mode -1)
     ;;when in a windowed system, use the fancy themes:
     (use-package spaceline
       :ensure t

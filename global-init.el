@@ -7,7 +7,6 @@
   `(when (eq system-type ',type)
      ,@body))
 
-
 ;;;******************************************************************
 ;;;******************************************************************
 ;;Configure globally needed packages:
@@ -26,6 +25,8 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(require 'use-package)
+
 (use-package auto-compile
   :ensure t
   :config
@@ -34,16 +35,24 @@
   ;(setq auto-compile-display-buffer nil)
   (setq auto-compile-mode-line-counter t))
 
-(eval-when-compile (require 'use-package))
-
 (use-package company
+  :config
+  (setq company-minimum-prefix-length 1)
+  (setq company-idle-delay 0.1)
   :ensure t)
+
 (use-package org
   :ensure org-plus-contrib
   :defer t
-  :commands org-mode)
+  :commands org-mode
+  :config
+  (setf org-list-allow-alphabetical t))
+
+
 (use-package magit
-  :ensure t)
+  :ensure t
+  :defer t)
+
 (use-package ivy
   :ensure t)
 (use-package swiper
@@ -54,15 +63,13 @@
 
 (ido-mode t)
 
+
 (setq-default auto-fill-function 'do-auto-fill)
 
 (set-fill-column 80)
 (add-hook 'before-save-hook 'time-stamp)
 (setq comint-prompt-read-only t)
 (setq tramp-default-method "ssh")
-
-(setq company-minimum-prefix-length 1)
-(setq company-idle-delay 0.1)
 
 (add-hook 'prog-mode-hook '(lambda ()
 			     (semantic-mode)
@@ -94,24 +101,26 @@
   :bind ("s-a" . vimish-fold-toggle))
 ;;:bind ("s-d" . vimish-unfold))
 
-(use-package multi-web-mode
-  :config
-  (setq mweb-default-major-mode 'html-mode)
-  (setq mweb-tags
-	'((php-mode "<\\?php\\|<\\? \\|<\\?=" "\\?>")
-	  (js-mode  "<script[^>]*>" "</script>")
-	  (css-mode "<style[^>]*>" "</style>")))
-  (setq mweb-filename-extensions '("php" "htm" "html" "ctp" "phtml" "php4" "php5"))
-  (multi-web-global-mode 1))
+(eval-after-load 'html-mode
+  (use-package multi-web-mode
+    :config
+    (setq mweb-default-major-mode 'html-mode)
+    (setq mweb-tags
+	  '((php-mode "<\\?php\\|<\\? \\|<\\?=" "\\?>")
+	    (js-mode  "<script[^>]*>" "</script>")
+	    (css-mode "<style[^>]*>" "</style>")))
+    (setq mweb-filename-extensions '("php" "htm" "html" "ctp" "phtml" "php4" "php5"))
+    (multi-web-global-mode 1)))
 
-(use-package slime
-  :ensure t
-  :defer t
-  :config
-  (slime-setup '(slime-repl))
-  (setq slime-lisp-implementations
-	'((sbcl ("sbcl"))
-          (clisp ("clisp")))))
+(eval-after-load 'lisp-mode
+  (use-package slime
+    :ensure t
+    :defer t
+    :config
+    (slime-setup '(slime-repl))
+    (setq slime-lisp-implementations
+	  '((sbcl ("sbcl"))
+            (clisp ("clisp"))))))
 
 ;; (add-hook 'lisp-mode-hook '(lambda ()
 ;;                                   (unless (get-process "SLIME Lisp")
@@ -133,6 +142,10 @@
 			     (push '(company-semantic company-keywords)
 			     	   company-backends)))
 
+(add-hook 'c-mode-hook 'my-config-load-c-completion)
+(add-hook 'c++-mode-hook 'my-config-load-c-completion)
+
+;;;###autoload
 (defun my-config-load-c-completion ()
   (use-package irony
     :ensure t
@@ -143,46 +156,55 @@
     :ensure t)
   (use-package company-irony-c-headers
     :ensure t)
+  ;; remove the current function:
+  (remove-hook 'c++-mode-hook 'my-config-load-c-completion)
+  (remove-hook 'c-mode-hook 'my-config-load-c-completion)
+  (fmakunbound 'my-config-load-c-completion)
+  ;; setup  c modes:
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
   (add-to-list 'company-backends '(company-irony-c-headers company-irony))
   (irony-mode))
-
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-
-(add-hook 'c-mode-hook 'my-config-load-c-completion)
-
-(add-hook 'c++-mode-hook 'my-config-load-c-completion)
-
 
 (add-hook 'latex-mode-hook '(lambda ()
 			      (semantic-mode)
 			      (company-mode)))
-(use-package haskell-mode
-  :ensure t
-  :defer t)
-(eval-after-load 'haskell-mode '(progn
-  (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-file)
-  (define-key haskell-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
-  (define-key haskell-mode-map (kbd "C-c C-n C-t") 'haskell-process-do-type)
-  (define-key haskell-mode-map (kbd "C-c C-n C-i") 'haskell-process-do-info)
-  (define-key haskell-mode-map (kbd "C-c C-n C-c") 'haskell-process-cabal-build)
-  (define-key haskell-mode-map (kbd "C-c C-n c") 'haskell-process-cabal)))
-(eval-after-load 'haskell-cabal '(progn
-  (define-key haskell-cabal-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
-  (define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
-  (define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
-  (define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)))
+
+(eval-after-load 'haskell-mode
+  (progn
+    (use-package company-cabal
+      :ensure t
+      :defer t)
+    (use-package haskell-mode
+      :ensure t
+      :defer t)))
+(eval-after-load 'haskell-mode
+  '(progn
+     (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-file)
+     (define-key haskell-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
+     (define-key haskell-mode-map (kbd "C-c C-n C-t") 'haskell-process-do-type)
+     (define-key haskell-mode-map (kbd "C-c C-n C-i") 'haskell-process-do-info)
+     (define-key haskell-mode-map (kbd "C-c C-n C-c") 'haskell-process-cabal-build)
+     (define-key haskell-mode-map (kbd "C-c C-n c") 'haskell-process-cabal)))
+(eval-after-load 'haskell-cabal
+  '(progn
+     (define-key haskell-cabal-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
+     (define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
+     (define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
+     (define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)))
 
 
 
-(let ((maxima-location "/usr/local/share/maxima/5.40.0/emacs/"))
-  (when (file-directory-p maxima-location)
-    (add-to-list 'load-path maxima-location)
-    (autoload 'maxima-mode "maxima" "Maxima mode" t)
-    (autoload 'imaxima "imaxima" "Frontend for maxima with Image support" t)
-    (autoload 'maxima "maxima" "Maxima interaction" t)
-    (autoload 'imath-mode "imath" "Imath mode for math formula input" t)
-    (setq imaxima-use-maxima-mode-flag t)
-    (add-to-list 'auto-mode-alist '("\\.ma[cx]" . maxima-mode))))
+;; (let ((maxima-location "/usr/local/share/maxima/5.40.0/emacs/"))
+;;   (when (file-directory-p maxima-location)
+;;     (add-to-list 'load-path maxima-location)
+;;     (autoload 'maxima-mode "maxima" "Maxima mode" t)
+;;     (autoload 'imaxima "imaxima" "Frontend for maxima with Image support" t)
+;;     (autoload 'maxima "maxima" "Maxima interaction" t)
+;;     (autoload 'imath-mode "imath" "Imath mode for math formula input" t)
+;;     (setq imaxima-use-maxima-mode-flag t)
+;;     (add-to-list 'auto-mode-alist '("\\.ma[cx]" . maxima-mode))))
 
 
 (desktop-save-mode 1)
