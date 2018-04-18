@@ -1,5 +1,7 @@
 ;;Stuart Dilts 2014
 
+(setf ring-bell-function (lambda ()))
+
 ;; ;;macros:
 (defmacro with-system (type &rest body)
   "Evaluate body if `system-type' equals type."
@@ -100,7 +102,9 @@
 (use-package vimish-fold
   :ensure t
   :bind ("s-c" . vimish-fold)
-  :bind ("s-a" . vimish-fold-toggle))
+  :bind ("s-a" . vimish-fold-toggle)
+  :config
+  (vimish-fold-global-mode t))
 ;;:bind ("s-d" . vimish-unfold))
 
 (eval-after-load 'html-mode
