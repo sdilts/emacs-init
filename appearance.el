@@ -4,7 +4,7 @@
 (tool-bar-mode -1)
 
 
-(if (not window-system)
+(if (and (not window-system) (not (daemonp)))
     (progn
       (menu-bar-mode -1)
       (load-theme 'manoj-dark))
