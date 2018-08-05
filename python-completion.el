@@ -1,5 +1,7 @@
 (add-hook 'python-mode-hook 'init-python-mode)
 
+(setq python-shell-interpreter "/usr/bin/python3")
+
 ;;;###autoload
 (defun init-python-mode ()
   (use-package company-anaconda
