@@ -19,11 +19,14 @@
       (spaceline-emacs-theme)
       (spaceline-toggle-version-control-on)
       (setf powerline-default-separator 'arrow))
-    (use-package material-theme
-      :ensure t
-      :config
-      (load-theme 'material t))
+    ;; (use-package material-theme
+    ;;   :ensure t
+    ;;   :config
+    ;;   (load-theme 'material t))
+    (load-theme 'misterioso t)
+    (modify-all-frames-parameters (list (cons 'cursor-color "#ff6347")))
 
     (use-package fancy-battery
+      :ensure t
       :config
       (fancy-battery-mode))))
