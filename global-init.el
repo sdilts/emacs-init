@@ -50,7 +50,34 @@
   :defer t
   :commands org-mode
   :config
-  (setf org-list-allow-alphabetical t))
+  (setf org-list-allow-alphabetical t)
+  ;; (add-to-list 'org-babel-load-languages '(R . t))
+  (org-babel-do-load-languages 'org-babel-load-languages '((R . t)))
+  (add-to-list 'org-latex-packages-alist '("" "listings"))
+  (add-to-list 'org-latex-packages-alist '("dvipsnames" "xcolor"))
+  (setf org-list-allow-alphabetical t)
+  (setf org-latex-listings-options
+	'(("keywordstyle" "\\color{RoyalBlue}")
+	  ;; ("basicstyle" "\\scriptsize\\tfamily")
+	  ("commentstyle" "\\color{Green}\\ttfamily")
+	  ("stringstyle" "\\color{BrickRed}")
+	  ("rulecolor" "\\color{black}")
+	  ("upquote" "true")
+	  ("numbers" "left")
+	  ("numberstyle" "\\tiny\\color{gray}")
+	  ("stepnumber" "1")
+	  ("numbersep" "8pt")
+	  ("showstringspaces" "false")
+	  ("breaklines" "true")
+	  ("frameround" "ftff")
+	  ("xleftmargin" "\\parindent")
+	  ("frame" "single")
+	  ;; ("belowcaptionskip" "5em")
+	  ("belowskip" "1em")))
+  (setq org-latex-pdf-process
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
 
 
 (use-package magit
@@ -66,7 +93,6 @@
   :bind (("C-s" . swiper)))
 
 (ido-mode t)
-
 
 (setq-default auto-fill-function 'do-auto-fill)
 
