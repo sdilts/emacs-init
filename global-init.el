@@ -177,6 +177,7 @@
 (add-hook 'c-mode-hook 'my-config-load-c-completion)
 (add-hook 'c++-mode-hook 'my-config-load-c-completion)
 
+
 ;;;###autoload
 (defun my-config-load-c-completion ()
   (use-package irony
