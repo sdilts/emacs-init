@@ -36,7 +36,7 @@
   :config
   (auto-compile-on-load-mode)
   (auto-compile-on-save-mode)
-  ;(setq auto-compile-display-buffer nil)
+  (setq auto-compile-display-buffer nil)
   (setq auto-compile-mode-line-counter t))
 
 (use-package company
