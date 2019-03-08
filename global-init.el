@@ -239,8 +239,6 @@
 ;;     (add-to-list 'auto-mode-alist '("\\.ma[cx]" . maxima-mode))))
 
 
-(desktop-save-mode 1)
-(setq desktop-restore-eager 3)
 (setq tetris-score-file
       "~/.emacs.d/tetris-scores")
 (setq snake-score-file
