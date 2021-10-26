@@ -233,4 +233,6 @@
 (global-set-key (kbd "M-d") 'delete-backward-char)
 (global-set-key (kbd "C-o") 'newline-without-break-of-line)
 
+(global-set-key (kbd "<ESC> l") 'goto-line)
+
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
