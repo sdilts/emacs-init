@@ -144,6 +144,15 @@
 ;;;*********************************************************************
 ;: "Dynamically" loaded paackages:
 
+(eval-after-load 'cc-mode
+  (progn
+    (require 'cc-mode)
+    (add-to-list 'c-default-style '(c++-mode . "linux"))
+    (let ((tab-width-setter (lambda ()
+			      (setf tab-width 4
+				    c-basic-offset 4))))
+      (add-hook 'c-mode-hook tab-width-setter)
+      (add-hook 'c++-mode-hook tab-width-setter))))
 
 (add-hook 'comint-mode (lambda ()
 			  (company-mode)
