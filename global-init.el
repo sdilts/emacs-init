@@ -129,6 +129,8 @@
     (slime-setup '(slime-repl))
     (setq slime-lisp-implementations
 	  '((sbcl ("sbcl"))
+	    (ccl ("ccl"))
+	    (ecl ("ecl"))
             (clisp ("clisp"))))))
 
 ;; (add-hook 'lisp-mode-hook '(lambda ()
