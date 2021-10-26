@@ -188,16 +188,6 @@
 
 
 
-;; (let ((maxima-location "/usr/local/share/maxima/5.40.0/emacs/"))
-;;   (when (file-directory-p maxima-location)
-;;     (add-to-list 'load-path maxima-location)
-;;     (autoload 'maxima-mode "maxima" "Maxima mode" t)
-;;     (autoload 'imaxima "imaxima" "Frontend for maxima with Image support" t)
-;;     (autoload 'maxima "maxima" "Maxima interaction" t)
-;;     (autoload 'imath-mode "imath" "Imath mode for math formula input" t)
-;;     (setq imaxima-use-maxima-mode-flag t)
-;;     (add-to-list 'auto-mode-alist '("\\.ma[cx]" . maxima-mode))))
-
 (add-hook 'latex-mode-hook (lambda ()
 			     (semantic-mode)
 			     (company-mode)))
