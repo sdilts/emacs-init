@@ -19,15 +19,11 @@
       (spaceline-emacs-theme)
       (spaceline-toggle-version-control-on)
       (setf powerline-default-separator 'arrow))
-    ;; (use-package material-theme
-    ;;   :ensure t
-    ;;   :config
-    ;;   (load-theme 'material t))
     (load-theme 'misterioso t)
     (modify-all-frames-parameters (list (cons 'cursor-color "#ff6347")))
-    (setq w32-use-visible-system-caret nil)
 
     (without-system windows-nt
+      (setq w32-use-visible-system-caret nil)
       (use-package fancy-battery
 	:ensure t
 	:config
