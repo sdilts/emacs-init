@@ -153,31 +153,15 @@
 			     (push '(company-semantic company-keywords)
 			     	   company-backends)))
 
-(add-hook 'c-mode-hook 'my-config-load-c-completion)
-(add-hook 'c++-mode-hook 'my-config-load-c-completion)
+(use-package lsp-mode
+  :commands lsp
+  :ensure t
+  :config
+  (setq lsp-prefer-flymake nil)
+  ;; (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
+  :hook ((c-mode c++-mode rust-mode objc-mode) .
+         (lambda () (lsp))))
 
-
-;;;###autoload
-(defun my-config-load-c-completion ()
-  (use-package irony
-    :ensure t
-    :config
-    (unless (irony--find-server-executable)
-      (call-interactively #'irony-install-server)))
-  (use-package company-irony
-    :ensure t)
-  (use-package company-irony-c-headers
-    :ensure t)
-  ;; remove the current function:
-  (remove-hook 'c++-mode-hook 'my-config-load-c-completion)
-  (remove-hook 'c-mode-hook 'my-config-load-c-completion)
-  (fmakunbound 'my-config-load-c-completion)
-  ;; setup  c modes:
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
-  (add-to-list 'company-backends '(company-irony-c-headers company-irony))
-  (irony-mode))
 
 (eval-after-load 'haskell-mode
   (progn
