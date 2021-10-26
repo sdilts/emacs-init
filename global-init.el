@@ -15,6 +15,15 @@
   `(unless (eq system-type ',type)
      ,@body))
 
+;; Set the backup file names to be hidden:
+(defun make-backup-file-name-hidden (filename)
+  (let* ((full-name (make-backup-file-name--default-function filename))
+	 (file-part (file-name-nondirectory full-name))
+	 (path-part (file-name-directory full-name)))
+    (concat path-part "." file-part)))
+
+(setf make-backup-file-name-function 'make-backup-file-name--default-function)
+
 ;;;******************************************************************
 ;;;******************************************************************
 ;;Configure globally needed packages:
