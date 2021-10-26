@@ -79,7 +79,7 @@
 (setq comint-prompt-read-only t)
 (setq tramp-default-method "ssh")
 
-(add-hook 'prog-mode-hook '(lambda ()
+(add-hook 'prog-mode-hook (lambda ()
 			     (semantic-mode)
 			     (company-mode)
 			     (auto-fill-mode -1)))
@@ -89,7 +89,7 @@
 				  global-semantic-idle-summary-mode
 				  global-semantic-mru-bookmark-mode))
 
-(add-hook 'shell-mode-hook '(lambda ()
+(add-hook 'shell-mode-hook (lambda ()
 			      (compilation-shell-minor-mode)
 			      (company-mode)
 			      (auto-fill-mode -1)))
@@ -142,12 +142,12 @@
 ;: "Dynamically" loaded paackages:
 
 
-(add-hook 'comint-mode '(lambda ()
+(add-hook 'comint-mode (lambda ()
 			  (company-mode)
 			  (auto-fill-mode -1)))
 
 
-(add-hook 'java-mode-hook '(lambda ()
+(add-hook 'java-mode-hook (lambda ()
 			     (make-local-variable 'company-backends)
 			     (push '(company-semantic company-keywords)
 			     	   company-backends)))
@@ -177,10 +177,6 @@
   (add-hook 'c-mode-hook 'irony-mode)
   (add-to-list 'company-backends '(company-irony-c-headers company-irony))
   (irony-mode))
-
-(add-hook 'latex-mode-hook '(lambda ()
-			      (semantic-mode)
-			      (company-mode)))
 
 (eval-after-load 'haskell-mode
   (progn
@@ -217,6 +213,9 @@
 ;;     (setq imaxima-use-maxima-mode-flag t)
 ;;     (add-to-list 'auto-mode-alist '("\\.ma[cx]" . maxima-mode))))
 
+(add-hook 'latex-mode-hook (lambda ()
+			     (semantic-mode)
+			     (company-mode)))
 
 (setq tetris-score-file
       "~/.emacs.d/tetris-scores")
