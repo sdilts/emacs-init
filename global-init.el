@@ -91,7 +91,6 @@
 
 (add-hook 'shell-mode-hook (lambda ()
 			      (compilation-shell-minor-mode)
-			      (company-mode)
 			      (auto-fill-mode -1)))
 
 (use-package popwin
