@@ -1,6 +1,8 @@
 ;;Stuart Dilts 2014
 
 (setf ring-bell-function (lambda ()))
+;; actual pt of the font is value / 10:
+(set-face-attribute 'default nil :height 110)
 
 ;; ;;macros:
 (defmacro with-system (type &rest body)
