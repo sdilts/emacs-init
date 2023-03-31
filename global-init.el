@@ -9,6 +9,12 @@
   `(when (eq system-type ',type)
      ,@body))
 
+(defmacro without-system (type &rest body)
+  "Evaluate body if `system-type' equals type."
+  (declare (indent defun))
+  `(unless (eq system-type ',type)
+     ,@body))
+
 ;;;******************************************************************
 ;;;******************************************************************
 ;;Configure globally needed packages:

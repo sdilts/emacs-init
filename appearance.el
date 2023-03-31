@@ -25,8 +25,10 @@
     ;;   (load-theme 'material t))
     (load-theme 'misterioso t)
     (modify-all-frames-parameters (list (cons 'cursor-color "#ff6347")))
+    (setq w32-use-visible-system-caret nil)
 
-    (use-package fancy-battery
-      :ensure t
-      :config
-      (fancy-battery-mode))))
+    (without-system windows-nt
+      (use-package fancy-battery
+	:ensure t
+	:config
+	(fancy-battery-mode)))))
