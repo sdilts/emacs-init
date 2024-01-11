@@ -12,7 +12,7 @@
     (menu-bar-mode -1)
     ;;when in a windowed system, use the fancy themes:
     (use-package spaceline
-      :ensure t
+      ;; :ensure t
       :config
       (require 'spaceline-config)
       (spaceline-compile)

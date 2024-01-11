@@ -1,5 +1,6 @@
-(use-package tide-mode
-  :ensure t)
+(use-package tide
+  :ensure t
+  )
 
 (defun setup-tide-mode ()
   (interactive)
@@ -36,7 +37,7 @@
 ;;   :config
 ;;   (setq web-mode-engines-alist
 ;; 	'(("freemarker" . "\\.ftlh"))))
-
+(require 'eglot)
 (define-derived-mode ng-template-mode mhtml-mode "Angular Template"
   "Major mode for Angular template files")
 
@@ -44,7 +45,7 @@
 
 (add-to-list 'auto-mode-alist '("\\.component.html\\'" . ng-template-mode))
 
-(require 'eglot)
+;; (require 'eglot)
 (add-to-list `eglot-server-programs
 	     `(ng-template-mode "node"
 				"C:/Users/cnc030/node_modules/@angular/language-server/index.js"
