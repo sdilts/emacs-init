@@ -135,7 +135,6 @@
 (setq tramp-default-method "ssh")
 
 (add-hook 'prog-mode-hook (lambda ()
-			     (semantic-mode)
 			     (company-mode)
 			     (auto-fill-mode -1)))
 
@@ -193,25 +192,9 @@
 			  (company-mode)
 			  (auto-fill-mode -1)))
 
-
-(add-hook 'java-mode-hook (lambda ()
-			     (make-local-variable 'company-backends)
-			     (push '(company-semantic company-keywords)
-			     	   company-backends)))
-
-(use-package lsp-mode
-  :commands lsp
-  :ensure t
-  :config
-  (setq lsp-prefer-flymake nil)
-  ;; (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
-  :hook ((c-mode c++-mode rust-mode objc-mode) .
-         (lambda () (lsp))))
-
-(eval-after-load 'rust-mode
-  (use-package flycheck-rust
-    :ensure t
-    :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
+(use-package eglot
+  :hook ((c-mode c++-mode rust-mode java-mode) .
+	 (lambda () (eglot-ensure))))
 
 (add-hook 'latex-mode-hook (lambda ()
 			     (semantic-mode)
