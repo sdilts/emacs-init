@@ -26,6 +26,12 @@
 
 (setf make-backup-file-name-function 'make-backup-file-name--default-function)
 
+(setf dired-kill-when-opening-new-dired-buffer t)
+
+;; silence the native comp warnings:
+(if (> emacs-major-version 27)
+    (setq native-comp-async-report-warnings-errors nil))
+
 ;;;******************************************************************
 ;;;******************************************************************
 ;;Configure globally needed packages:
@@ -36,9 +42,13 @@
 (add-to-list 'package-archives
 	     '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+	     '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+
+;; note: you must manually initialze the packages the first time that
+;; emacs is run on a new machine
 (if (< emacs-major-version 27)
-    (package-initialize))
+    (package-initialize)
+  (setf package-quickstart nil))
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -58,7 +68,49 @@
   :config
   (setq company-minimum-prefix-length 1)
   (setq company-idle-delay 0.1)
+  (setq company-backends '(company-elisp
+			   company-cmake
+			   company-capf
+			   company-files
+			   (company-dabbrev-code company-gtags company-etags company-keywords)
+			   company-oddmuse
+			   company-dabbrev))
   :ensure t)
+
+(use-package org
+;;  :ensure org-plus-contrib
+  :defer t
+  :commands org-mode
+  :config
+  (setf org-list-allow-alphabetical t)
+  ;; (add-to-list 'org-babel-load-languages '(R . t))
+  (org-babel-do-load-languages 'org-babel-load-languages '((R . t) (lisp . t)))
+  (add-to-list 'org-latex-packages-alist '("" "listings"))
+  (add-to-list 'org-latex-packages-alist '("dvipsnames" "xcolor"))
+  (setf org-list-allow-alphabetical t)
+  (setf org-latex-listings-options
+	'(("keywordstyle" "\\color{RoyalBlue}")
+	  ;; ("basicstyle" "\\scriptsize\\tfamily")
+	  ("commentstyle" "\\color{Green}\\ttfamily")
+	  ("stringstyle" "\\color{BrickRed}")
+	  ("rulecolor" "\\color{black}")
+	  ("upquote" "true")
+	  ("numbers" "left")
+	  ("numberstyle" "\\tiny\\color{gray}")
+	  ("stepnumber" "1")
+	  ("numbersep" "8pt")
+	  ("showstringspaces" "false")
+	  ("breaklines" "true")
+	  ("frameround" "ftff")
+	  ("xleftmargin" "\\parindent")
+	  ("frame" "single")
+	  ;; ("belowcaptionskip" "5em")
+	  ("belowskip" "1em")))
+  (setq org-latex-pdf-process
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
+
 
 (use-package magit
   :ensure t
@@ -66,6 +118,7 @@
 
 (use-package ivy
   :ensure t)
+
 (use-package swiper
   :ensure t
   :config
@@ -112,20 +165,8 @@
   (vimish-fold-global-mode t))
 ;;:bind ("s-d" . vimish-unfold))
 
-(eval-after-load 'html-mode
-  (use-package multi-web-mode
-    :config
-    (setq mweb-default-major-mode 'html-mode)
-    (setq mweb-tags
-	  '((php-mode "<\\?php\\|<\\? \\|<\\?=" "\\?>")
-	    (js-mode  "<script[^>]*>" "</script>")
-	    (css-mode "<style[^>]*>" "</style>")))
-    (setq mweb-filename-extensions '("php" "htm" "html" "ctp" "phtml" "php4" "php5"))
-    (multi-web-global-mode 1)))
-
 (eval-after-load 'lisp-mode
   (use-package slime
-    :ensure t
     :defer t
     :config
     (slime-setup '(slime-repl))
@@ -134,12 +175,6 @@
 	    (ccl ("ccl"))
 	    (ecl ("ecl"))
             (clisp ("clisp"))))))
-
-;; (add-hook 'lisp-mode-hook '(lambda ()
-;;                                   (unless (get-process "SLIME Lisp")
-;;                                      (let ((oldbuff (current-buffer)))
-;;                                        (slime)
-;;                                        (switch-buffer oldbuff)))))
 
 ;;;*********************************************************************
 ;: "Dynamically" loaded paackages:
@@ -173,31 +208,10 @@
   :hook ((c-mode c++-mode rust-mode objc-mode) .
          (lambda () (lsp))))
 
-
-(eval-after-load 'haskell-mode
-  (progn
-    (use-package company-cabal
-      :ensure t
-      :defer t)
-    (use-package haskell-mode
-      :ensure t
-      :defer t)))
-(eval-after-load 'haskell-mode
-  '(progn
-     (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-file)
-     (define-key haskell-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
-     (define-key haskell-mode-map (kbd "C-c C-n C-t") 'haskell-process-do-type)
-     (define-key haskell-mode-map (kbd "C-c C-n C-i") 'haskell-process-do-info)
-     (define-key haskell-mode-map (kbd "C-c C-n C-c") 'haskell-process-cabal-build)
-     (define-key haskell-mode-map (kbd "C-c C-n c") 'haskell-process-cabal)))
-(eval-after-load 'haskell-cabal
-  '(progn
-     (define-key haskell-cabal-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
-     (define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
-     (define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
-     (define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)))
-
-
+(eval-after-load 'rust-mode
+  (use-package flycheck-rust
+    :ensure t
+    :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
 
 (add-hook 'latex-mode-hook (lambda ()
 			     (semantic-mode)
