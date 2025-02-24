@@ -202,7 +202,7 @@
 (add-hook 'java-ts-mode-hook #'init-java-mode)
 
 (use-package eglot
-  :hook ((c-mode c++-mode rust-mode) .
+  :hook ((c-mode c++-mode rust-mode python-base-mode) .
 	 (lambda () (eglot-ensure))))
 
 (add-hook 'latex-mode-hook (lambda ()
