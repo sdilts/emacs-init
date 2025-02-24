@@ -192,6 +192,17 @@
 			  (company-mode)
 			  (auto-fill-mode -1)))
 
+(add-to-list 'major-mode-remap-alist '(java-mode . java-ts-mode))
+(defun init-java-mode ()
+  (make-local-variable 'project-vc-extra-root-markers)
+  (setq project-vc-extra-root-markers (list "build.gradle" "pom.xml")))
+;; Use the depth arg to add the hooks such that they are ran
+;; before most others, as we set project-vc-extra-root-markers
+;; in this, and that must come before we init eglot, which is
+;; done elsewhere
+(add-hook 'java-mode-hook #'init-java-mode -10)
+(add-hook 'java-ts-mode-hook #'init-java-mode -10)
+
 (use-package eglot
   :hook ((c-mode c++-mode rust-mode java-mode) .
 	 (lambda () (eglot-ensure))))
