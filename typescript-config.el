@@ -1,4 +1,4 @@
-(use-package tide-mode
+(use-package tide
   :ensure t)
 
 (defun setup-tide-mode ()
