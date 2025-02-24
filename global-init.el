@@ -4,6 +4,11 @@
 ;; actual pt of the font is value / 10:
 (set-face-attribute 'default nil :height 110)
 
+(kill-ring-deindent-mode 1)
+(setf gud-highlight-current-line t)
+(setf dired-movement-style 'bounded)
+(editorconfig-mode t)
+
 ;; ;;macros:
 (defmacro with-system (type &rest body)
   "Evaluate body if `system-type' equals type."
