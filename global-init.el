@@ -183,8 +183,9 @@
     (require 'cc-mode)
     (add-to-list 'c-default-style '(c++-mode . "linux"))
     (let ((tab-width-setter (lambda ()
-			      (setf tab-width 4
-				    c-basic-offset 4))))
+			      (setq-default indent-tabs-mode t)
+			      (setq-default tab-width 4) ; Assuming you want your tabs to be four spaces wide
+			      (defvaralias 'c-basic-offset 'tab-width))))
       (add-hook 'c-mode-hook tab-width-setter)
       (add-hook 'c++-mode-hook tab-width-setter))))
 
